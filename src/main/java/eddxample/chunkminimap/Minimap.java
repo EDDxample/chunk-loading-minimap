@@ -41,13 +41,11 @@ public class Minimap {
     }
 
     public static int getChunk(long chunkID) {
-//        synchronized ((IChunker) (Object) ((ServerChunkManager) MinecraftClient.getInstance().getServer().getWorld(DimensionType.OVERWORLD).getChunkManager()).threadedAnvilChunkStorage) {
-            try {
-                return status2int(((IChunker) (Object) ((ServerChunkManager) MinecraftClient.getInstance().getServer().getWorld(DimensionType.OVERWORLD).getChunkManager()).threadedAnvilChunkStorage).getIt(chunkID).getCompletedStatus());
-            } catch (Exception e) {
-                return 0xA0A0A0;
-            }
-//        }
+        try {
+            return status2int(((IChunker) (Object) ((ServerChunkManager) MinecraftClient.getInstance().getServer().getWorld(DimensionType.OVERWORLD).getChunkManager()).threadedAnvilChunkStorage).getIt(chunkID).getCompletedStatus());
+        } catch (Exception e) {
+            return 0xA0A0A0;
+        }
     }
     public static void addChunk(long chunkID, ChunkStatus status) {
         synchronized (chunk_list) {
@@ -80,7 +78,9 @@ public class Minimap {
         return new_status;
     }
 
-    public static interface IChunker { ChunkHolder getIt(long l); }
+    public static interface IChunker {
+        ChunkHolder getIt(long l);
+    }
 }
 
 

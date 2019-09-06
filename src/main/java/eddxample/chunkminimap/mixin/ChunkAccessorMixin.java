@@ -17,16 +17,25 @@ import java.io.File;
 import java.util.stream.Stream;
 
 @Mixin(ThreadedAnvilChunkStorage.class)
-public abstract class ChunkAccessorMixin extends VersionedChunkStorage implements ChunkHolder.PlayersWatchingChunkProvider, Minimap.IChunker {
+public abstract class ChunkAccessorMixin extends VersionedChunkStorage implements Minimap.IChunker {
 
     public ChunkAccessorMixin(File file_1, DataFixer dataFixer_1) { super(file_1, dataFixer_1); }
-    public Stream<ServerPlayerEntity> getPlayersWatchingChunk(ChunkPos chunkPos, boolean b) { return null; }
 
-    @Shadow @Final final Long2ObjectLinkedOpenHashMap<ChunkHolder> currentChunkHolders =  new Long2ObjectLinkedOpenHashMap();
-    @Shadow ChunkHolder getChunkHolder(long l) { return currentChunkHolders.get(l); }
+//
+//    @Shadow @Final final Long2ObjectLinkedOpenHashMap<ChunkHolder> currentChunkHolders =  new Long2ObjectLinkedOpenHashMap();
+//    @Shadow ChunkHolder getCurrentChunkHolder(long l) { return currentChunkHolders.get(l); }
+//
+//    public ChunkHolder getIt(long l) {
+//        return getCurrentChunkHolder(l);
+//    }
 
-    @Override
+
+    @Shadow @Final final Long2ObjectLinkedOpenHashMap<ChunkHolder> chunkHolders =  new Long2ObjectLinkedOpenHashMap();
+    @Shadow ChunkHolder getChunkHolder(long l) { return chunkHolders.get(l); }
+
     public ChunkHolder getIt(long l) {
         return getChunkHolder(l);
     }
+
+
 }
