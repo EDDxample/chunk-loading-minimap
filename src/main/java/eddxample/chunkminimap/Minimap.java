@@ -2,6 +2,7 @@ package eddxample.chunkminimap;
 
 import eddxample.chunkminimap.mixin.ChunkAccessorMixin;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ServerChunkManager;
 import net.minecraft.world.chunk.ChunkStatus;
 import net.minecraft.world.dimension.Dimension;
@@ -36,22 +37,17 @@ public class Minimap {
         System.setProperty("java.awt.headless", "true");
     }
     public static void closeMinimap() {
-        minimap.dispatchEvent(new WindowEvent(minimap, WindowEvent.WINDOW_CLOSING));
+        if (minimap != null) minimap.dispatchEvent(new WindowEvent(minimap, WindowEvent.WINDOW_CLOSING));
     }
 
     public static int getChunk(long chunkID) {
-        synchronized (chunk_list) {
-            if (chunk_list.containsKey(chunkID))
-                return chunk_list.get(chunkID);
-            else return 0xA0A0A0;
-        }
-//        try {
-//            return status2int(((ChunkAccessorMixin)(Object)((ServerChunkManager)MinecraftClient.getInstance().getServer().getWorld(DimensionType.OVERWORLD).getChunkManager()).threadedAnvilChunkStorage).getCurrentChunkHolder(chunkID).getCompletedStatus());
+//        synchronized ((IChunker) (Object) ((ServerChunkManager) MinecraftClient.getInstance().getServer().getWorld(DimensionType.OVERWORLD).getChunkManager()).threadedAnvilChunkStorage) {
+            try {
+                return status2int(((IChunker) (Object) ((ServerChunkManager) MinecraftClient.getInstance().getServer().getWorld(DimensionType.OVERWORLD).getChunkManager()).threadedAnvilChunkStorage).getIt(chunkID).getCompletedStatus());
+            } catch (Exception e) {
+                return 0xA0A0A0;
+            }
 //        }
-//        catch (Exception e) {
-//            return 0xA0A0A0;
-//        }
-
     }
     public static void addChunk(long chunkID, ChunkStatus status) {
         synchronized (chunk_list) {
@@ -61,6 +57,9 @@ public class Minimap {
             minimap.repaint();
         }
     }
+
+    public static void update() { if (minimap != null) minimap.repaint(); }
+
     public static int status2int(ChunkStatus status) {
         int new_status = 0;
         if (status == null) return 0xA0A0A0;
@@ -80,6 +79,8 @@ public class Minimap {
         }
         return new_status;
     }
+
+    public static interface IChunker { ChunkHolder getIt(long l); }
 }
 
 
@@ -207,3 +208,5 @@ class MinimapPanel extends JPanel implements ActionListener, MouseListener, Mous
     public void mouseExited    (MouseEvent e) {}
     public void mouseMoved     (MouseEvent e) {}
 }
+
+

@@ -1,11 +1,32 @@
 package eddxample.chunkminimap.mixin;
 
+import com.mojang.datafixers.DataFixer;
+import eddxample.chunkminimap.Main;
+import eddxample.chunkminimap.Minimap;
+import it.unimi.dsi.fastutil.longs.Long2ObjectLinkedOpenHashMap;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ChunkHolder;
 import net.minecraft.server.world.ThreadedAnvilChunkStorage;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.VersionedChunkStorage;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.gen.Accessor;
+import org.spongepowered.asm.mixin.Shadow;
+
+import java.io.File;
+import java.util.stream.Stream;
 
 @Mixin(ThreadedAnvilChunkStorage.class)
-public interface ChunkAccessorMixin {
-    @Accessor("getCurrentChunkHolder") ChunkHolder getCurrentChunkHolder(long l);
+public abstract class ChunkAccessorMixin extends VersionedChunkStorage implements ChunkHolder.PlayersWatchingChunkProvider, Minimap.IChunker {
+
+    public ChunkAccessorMixin(File file_1, DataFixer dataFixer_1) { super(file_1, dataFixer_1); }
+    public Stream<ServerPlayerEntity> getPlayersWatchingChunk(ChunkPos chunkPos, boolean b) { return null; }
+
+    @Shadow @Final final Long2ObjectLinkedOpenHashMap<ChunkHolder> currentChunkHolders =  new Long2ObjectLinkedOpenHashMap();
+    @Shadow ChunkHolder getChunkHolder(long l) { return currentChunkHolders.get(l); }
+
+    @Override
+    public ChunkHolder getIt(long l) {
+        return getChunkHolder(l);
+    }
 }

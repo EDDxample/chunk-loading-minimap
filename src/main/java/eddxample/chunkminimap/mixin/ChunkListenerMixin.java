@@ -14,6 +14,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ChunkListenerMixin {
 	@Inject(method = "method_17674(Lnet/minecraft/util/math/ChunkPos;Lnet/minecraft/world/chunk/ChunkStatus;)V", at = @At("HEAD"))
 	public void addChunk(ChunkPos chunk, ChunkStatus status, CallbackInfo ci) {
-		Minimap.addChunk(chunk.toLong(), status);
+		Minimap.update();
 	}
 }

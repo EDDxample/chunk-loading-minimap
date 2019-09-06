@@ -13,6 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class JoinWorldMixin {
     @Inject(method = "onPlayerConnect", at = @At("HEAD"))
     public void onPlayerConnect(ClientConnection cc, ServerPlayerEntity spe, CallbackInfo ci) {
-//        Minimap.init();
+        Minimap.init();
     }
 }
