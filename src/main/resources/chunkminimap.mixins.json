@@ -5,7 +5,10 @@
   "mixins": [
   ],
   "client": [
-    "ExampleMixin"
+    "ChunkListenerMixin",
+    "JoinWorldMixin",
+    "ExitWorldMixin",
+    "ChunkAccessorMixin"
   ],
   "injectors": {
     "defaultRequire": 1
