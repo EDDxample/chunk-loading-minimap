@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "chunkminimap",
+  "version": "${version}",
+
+  "name": "ChunkMinimap",
+  "description": "Displays the chunk tickets in a grid",
+  "authors": [
+    "EDDxample"
+  ],
+  "contact": {
+    "homepage": "https://fabricmc.net/",
+    "sources": "https://github.com/FabricMC/fabric-example-mod"
+  },
+
+  "license": "CC0-1.0",
+  "icon": "assets/chunkminimap/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "eddxample.chunkminimap.Main"
+    ]
+  },
+  "mixins": [
+    "chunkminimap.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "fabric": "*"
+  },
+  "suggests": {
+    "flamingo": "*"
+  }
+}
