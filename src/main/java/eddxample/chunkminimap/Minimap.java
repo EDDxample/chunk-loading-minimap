@@ -16,12 +16,16 @@ import javax.swing.*;
 
 
 public class Minimap {
+
+    static { System.setProperty("java.awt.headless", "false"); }
+
     private static HashMap<Long, Integer> chunk_list = new HashMap<>();
     private static JFrame minimap;
     private static DimensionType dim = DimensionType.OVERWORLD;
 
     public static void init() {
-        System.setProperty("java.awt.headless", "false");
+        System.out.println("Headless: " + java.awt.GraphicsEnvironment.isHeadless());
+
         javax.swing.SwingUtilities.invokeLater(new Runnable() { public void run() { initMinimap(); } });
     }
     public static void initMinimap() {
