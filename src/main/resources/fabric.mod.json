@@ -18,9 +18,7 @@
 
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "eddxample.chunkminimap.Main"
-    ]
+
   },
   "mixins": [
     "chunkminimap.mixins.json"

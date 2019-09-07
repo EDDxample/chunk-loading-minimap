@@ -8,7 +8,8 @@
     "ChunkListenerMixin",
     "JoinWorldMixin",
     "ExitWorldMixin",
-    "ChunkAccessorMixin"
+    "ChunkAccessorMixin",
+    "ServerTickMixin"
   ],
   "injectors": {
     "defaultRequire": 1
