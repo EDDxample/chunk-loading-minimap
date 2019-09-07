@@ -9,7 +9,8 @@
     "JoinWorldMixin",
     "ExitWorldMixin",
     "ChunkAccessorMixin",
-    "FlatlandsMixin"
+    "FlatlandsMixin",
+    "ServerTickMixin"
   ],
   "injectors": {
     "defaultRequire": 1

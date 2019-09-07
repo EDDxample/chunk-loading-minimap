@@ -17,12 +17,11 @@ import javax.swing.*;
 
 public class Minimap {
     static { System.setProperty("java.awt.headless", "false"); }
-    private static HashMap<Long, Integer> chunk_list = new HashMap<>();
     private static JFrame minimap;
     private static DimensionType dim = DimensionType.OVERWORLD;
 
     public static void init() {
-        javax.swing.SwingUtilities.invokeLater(new Runnable() { public void run() { initMinimap(); } });
+        javax.swing.SwingUtilities.invokeLater(new Runnable() { public void run() { System.setProperty("java.awt.headless", "false"); initMinimap(); } });
     }
     public static void initMinimap() {
         minimap = new JFrame("Chunk Minimap");
@@ -34,29 +33,37 @@ public class Minimap {
         minimap.getContentPane().addMouseWheelListener(mp);
         minimap.add(mp);
         minimap.setVisible(true);
-        System.setProperty("java.awt.headless", "true");
     }
     public static void closeMinimap() {
-        if (minimap != null) minimap.dispatchEvent(new WindowEvent(minimap, WindowEvent.WINDOW_CLOSING));
+        if (minimap != null) {
+            minimap.setVisible(false);
+            minimap = null;
+            Thread.currentThread().interrupt();
+        }
     }
 
     public static int getChunk(long chunkID) {
         try {
-            return status2int(((IChunker) (Object) ((ServerChunkManager) MinecraftClient.getInstance().getServer().getWorld(DimensionType.OVERWORLD).getChunkManager()).threadedAnvilChunkStorage).getIt(chunkID).getCompletedStatus());
+            return status2int(((IChunker) (Object) ((ServerChunkManager) MinecraftClient.getInstance().getServer().getWorld(dim).getChunkManager()).threadedAnvilChunkStorage).getIt(chunkID).getCompletedStatus());
         } catch (Exception e) {
             return 0xA0A0A0;
         }
     }
     public static void addChunk(long chunkID, ChunkStatus status) {
-        synchronized (chunk_list) {
-            if (minimap == null) return;
-            if (status == null) chunk_list.remove(chunkID);
-            else chunk_list.put(chunkID, status2int(status));
-            minimap.repaint();
-        }
+//        synchronized (chunk_list) {
+//            if (minimap == null) return;
+//            if (status == null) chunk_list.remove(chunkID);
+//            else chunk_list.put(chunkID, status2int(status));
+//            minimap.repaint();
+//        }
     }
 
-    public static void update() { if (minimap != null) minimap.repaint(); }
+    public static void update() {
+        if (minimap != null)
+        if (minimap.isShowing())
+            minimap.repaint();
+        else closeMinimap();
+    }
 
     public static int status2int(ChunkStatus status) {
         int new_status = 0;
@@ -96,6 +103,13 @@ class MinimapPanel extends JPanel implements ActionListener, MouseListener, Mous
     }
 
     static Color getColor(int x, int z) {
+
+        if (MinecraftClient.getInstance().player != null) {
+            int cx = MinecraftClient.getInstance().player.chunkX,
+                cz = MinecraftClient.getInstance().player.chunkZ;
+             if (cx == x && cz == z) return Color.MAGENTA;
+        }
+
         Color c = new Color(Minimap.getChunk(asLong(x, z)));
         return (x + z) % 2 == 0 ? c : getDarker(c);
     }
