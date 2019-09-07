@@ -8,7 +8,8 @@
     "ChunkListenerMixin",
     "JoinWorldMixin",
     "ExitWorldMixin",
-    "ChunkAccessorMixin"
+    "ChunkAccessorMixin",
+    "FlatlandsMixin"
   ],
   "injectors": {
     "defaultRequire": 1
